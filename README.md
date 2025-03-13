@@ -12,7 +12,7 @@ This is a job portal application built with Laravel.
 1. Clone the repository:
 
     ```sh
-    git clone
+    git clone https://github.com/thelegend2004/job-portal.git
     cd job-portal
     ```
 
