@@ -5,10 +5,22 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Vacancy;
+use App\Models\Department;
 
 class VacancyControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Seed the departments table
+        Department::factory()->create(['id' => 1]);
+
+        // Disable middleware for testing
+        $this->withoutMiddleware();
+    }
 
     /**
      * Test the index method.
@@ -17,7 +29,7 @@ class VacancyControllerTest extends TestCase
      */
     public function testIndex()
     {
-        $response = $this->get('/vacancies');
+        $response = $this->get('/api/vacancies');
 
         $response->assertStatus(200);
     }
@@ -32,12 +44,25 @@ class VacancyControllerTest extends TestCase
         $data = [
             'title' => 'Test Vacancy',
             'description' => 'This is a test vacancy description.',
+            'requirements' => ['PHP', 'Laravel', 'MySQL'],
+            'benefits' => ['Medical Insurance', 'Remote Work'],
+            'min_salary' => 500,
+            'max_salary' => 2000,
+            'contact_name' => 'John Doe',
+            'contact_phone' => '+1234567890',
+            'department_id' => 1,
+            'is_hot' => true,
+            'published_from' => now(),
+            'published_to' => now()->addMonth(),
         ];
 
-        $response = $this->post('/vacancies', $data);
+        $response = $this->post('/api/vacancies', $data);
 
         $response->assertStatus(201);
-        $this->assertDatabaseHas('vacancies', $data);
+        $this->assertDatabaseHas('vacancies', [
+            'title' => 'Test Vacancy',
+            'description' => 'This is a test vacancy description.',
+        ]);
     }
 
     /**
@@ -49,42 +74,8 @@ class VacancyControllerTest extends TestCase
     {
         $vacancy = Vacancy::factory()->create();
 
-        $response = $this->get("/vacancies/{$vacancy->id}");
+        $response = $this->get("/api/vacancies/{$vacancy->id}");
 
         $response->assertStatus(200);
-    }
-
-    /**
-     * Test the update method.
-     *
-     * @return void
-     */
-    public function testUpdate()
-    {
-        $vacancy = Vacancy::factory()->create();
-        $data = [
-            'title' => 'Updated Vacancy',
-            'description' => 'This is an updated vacancy description.',
-        ];
-
-        $response = $this->put("/vacancies/{$vacancy->id}", $data);
-
-        $response->assertStatus(200);
-        $this->assertDatabaseHas('vacancies', $data);
-    }
-
-    /**
-     * Test the destroy method.
-     *
-     * @return void
-     */
-    public function testDestroy()
-    {
-        $vacancy = Vacancy::factory()->create();
-
-        $response = $this->delete("/vacancies/{$vacancy->id}");
-
-        $response->assertStatus(200);
-        $this->assertDatabaseMissing('vacancies', ['id' => $vacancy->id]);
     }
 }

@@ -78,4 +78,14 @@ class Vacancy extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function setRequirementsAttribute($value)
+    {
+        $this->attributes['requirements'] = json_encode($value);
+    }
+
+    public function setBenefitsAttribute($value)
+    {
+        $this->attributes['benefits'] = json_encode($value);
+    }
 }

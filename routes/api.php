@@ -26,4 +26,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('vacancies', VacancyController::class);
 });
 
+Route::resource('vacancies', VacancyController::class);
+
 Route::get('/vacancies', [VacancyController::class, 'index']);
