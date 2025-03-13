@@ -1,0 +1,21 @@
+curl -X POST http://localhost/api/login \
+ -H "Content-Type: application/json" \
+ -H "Accept: application/json" \
+ -d '{
+"email": "admin@example.ua",
+"password": "password123"
+}'
+
+curl -X GET "http://localhost/api/vacancies?title=Developer"
+
+curl -X GET "http://localhost/api/vacancies?department_id=1"
+
+curl -X GET "http://localhost/api/vacancies?title=Manager"
+
+curl -X GET "http://localhost/api/documentation"
+
+curl -X GET "http://localhost/api/departments" \
+ -H "Authorization: Bearer 4|JC4X6O4Kgj0Z6HA2A5C87cGSb9wVYt6fiVSvvrUK3bade27b"
+
+curl -X GET "http://localhost/api/vacancies" \
+ -H "Authorization: Bearer 4|JC4X6O4Kgj0Z6HA2A5C87cGSb9wVYt6fiVSvvrUK3bade27b"
